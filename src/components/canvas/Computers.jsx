@@ -125,7 +125,7 @@ const Computers = ({ isMobile }) => {
       <pointLight intensity={2} />
       <primitive
         object={scene}
-        scale={isMobile ? 0.29 : 0.59}
+        scale={isMobile ? 0.29 : 0.9}
         position={isMobile ? [0, -2, -0.6] : [0, -3.25, -1.5]}
         rotation={[-0.01, -0.2, -0.1]}
       />
@@ -139,6 +139,7 @@ const ComputersCanvas = () => {
   useEffect(() => {
     // Get the device pixel ratio
     const devicePixelRatio = window.devicePixelRatio;
+    console.log(devicePixelRatio)
 
     // Adjust DPR values based on device pixel ratio
     if (devicePixelRatio > 1) {
