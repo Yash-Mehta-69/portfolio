@@ -98,7 +98,7 @@ const Computers = ({ isMobile }) => {
   const { scene, error } = useGLTF("/pc/scene.gltf");
 
   if (error) {
-    console.error("Error loading the GLTF model:", error);
+    alert("Error loading the GLTF model:", error);
     return (
       <mesh>
         <boxGeometry args={[1, 1, 1]} />
