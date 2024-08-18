@@ -97,13 +97,15 @@ const Hero = () => {
         <Socials />
       </div>
 
-      {hasError ? (
-        <div className="absolute inset-0 flex items-center justify-center text-white text-xl">
-          Model failed to load. Please check back later.
-        </div>
-      ) : (
-        <ComputersCanvas onError={handleError} />
-      )}
+      <div className="absolute inset-0 flex items-center justify-center">
+        {hasError ? (
+          <div className="text-white text-xl">
+            Model failed to load. Please check back later.
+          </div>
+        ) : (
+          <ComputersCanvas onError={handleError} />
+        )}
+      </div>
     </section>
   );
 };
