@@ -95,7 +95,7 @@ const Computers = ({ isMobile }) => {
   const { scene, isLoading, error } = useGLTF("./pc/scene.gltf");
 
   if (error) {
-    console.error("Error loading the GLTF model:", error);
+    alert("Error loading the GLTF model:", error);
     return (
       <mesh>
         {/* Fallback content if the model fails to load */}
