@@ -97,7 +97,7 @@ const Hero = () => {
         <Socials />
       </div>
 
-      <div className="absolute inset-0 flex items-center justify-center">
+      <div className="absolute inset-0 bottom-[0px] flex items-center justify-center w-100 h-100">
         {hasError ? (
           <div className="text-white text-xl">
             Model failed to load. Please check back later.
