@@ -89,22 +89,26 @@
 
 
 
-import React, { Suspense, useEffect, useState } from "react";
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Preload, useGLTF } from "@react-three/drei";
-import CanvasLoader from "../Loader";
+import React, { useState, useEffect, Suspense } from 'react';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, Preload, useGLTF } from '@react-three/drei';
+import CanvasLoader from '../Loader';
 
 const Computers = ({ isMobile }) => {
-  const { scene, error } = useGLTF("/pc/scene.gltf");
+  const { scene, isLoading, error } = useGLTF("./pc/scene.gltf");
 
   if (error) {
-    alert("Error loading the GLTF model:", error);
+    console.error("Error loading the GLTF model:", error);
     return (
       <mesh>
         <boxGeometry args={[1, 1, 1]} />
         <meshStandardMaterial color="orange" />
       </mesh>
     );
+  }
+
+  if (isLoading) {
+    return null; // Or some loading placeholder
   }
 
   return (
@@ -130,19 +134,29 @@ const Computers = ({ isMobile }) => {
 };
 
 const ComputersCanvas = () => {
-  const [isMobile, setIsMobile] = useState(false);
+  const [dpr, setDpr] = useState([1, 2]); // Default DPR values
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 500px)");
-    setIsMobile(mediaQuery.matches);
+    // Get the device pixel ratio
+    const devicePixelRatio = window.devicePixelRatio;
 
-    const handleMediaQueryChange = (event) => {
-      setIsMobile(event.matches);
+    // Adjust DPR values based on device pixel ratio
+    if (devicePixelRatio > 1) {
+      setDpr([1, 2]); // Higher DPR for high-DPI screens
+    } else {
+      setDpr([1, 1]); // Standard DPR for regular screens
+    }
+
+    // Optionally, listen for changes in device pixel ratio if needed
+    const handleResize = () => {
+      const newDevicePixelRatio = window.devicePixelRatio;
+      setDpr(newDevicePixelRatio > 1 ? [1, 2] : [1, 1]);
     };
 
-    mediaQuery.addEventListener("change", handleMediaQueryChange);
+    window.addEventListener('resize', handleResize);
+
     return () => {
-      mediaQuery.removeEventListener("change", handleMediaQueryChange);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -150,7 +164,7 @@ const ComputersCanvas = () => {
     <Canvas
       frameloop="demand"
       shadows
-      dpr={[1, 2]}
+      dpr={dpr}
       camera={{ position: [20, 3, 5], fov: 25 }}
       gl={{ preserveDrawingBuffer: true }}
       onContextMenu={(e) => e.preventDefault()}
@@ -163,10 +177,8 @@ const ComputersCanvas = () => {
           maxPolarAngle={Math.PI / 2}
           minPolarAngle={Math.PI / 2}
           autoRotateSpeed={10}
-          enableDamping
-          dampingFactor={0.25}
         />
-        <Computers isMobile={isMobile} />
+        <Computers isMobile={window.devicePixelRatio > 1} />
       </Suspense>
 
       <Preload all />
@@ -175,3 +187,4 @@ const ComputersCanvas = () => {
 };
 
 export default ComputersCanvas;
+
