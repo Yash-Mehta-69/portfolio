@@ -85,28 +85,26 @@
 // export default ComputersCanvas;
 
 
+
+
+
+
 import React, { Suspense, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Preload, useGLTF } from "@react-three/drei";
-
 import CanvasLoader from "../Loader";
 
 const Computers = ({ isMobile }) => {
-  const { scene, isLoading, error } = useGLTF("./pc/scene.gltf");
+  const { scene, error } = useGLTF("/pc/scene.gltf");
 
   if (error) {
-    alert("Error loading the GLTF model:", error);
+    console.error("Error loading the GLTF model:", error);
     return (
       <mesh>
-        {/* Fallback content if the model fails to load */}
         <boxGeometry args={[1, 1, 1]} />
         <meshStandardMaterial color="orange" />
       </mesh>
     );
-  }
-
-  if (isLoading) {
-    return null; // Or some loading placeholder
   }
 
   return (
@@ -136,7 +134,6 @@ const ComputersCanvas = () => {
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 500px)");
-
     setIsMobile(mediaQuery.matches);
 
     const handleMediaQueryChange = (event) => {
@@ -144,7 +141,6 @@ const ComputersCanvas = () => {
     };
 
     mediaQuery.addEventListener("change", handleMediaQueryChange);
-
     return () => {
       mediaQuery.removeEventListener("change", handleMediaQueryChange);
     };
@@ -167,6 +163,8 @@ const ComputersCanvas = () => {
           maxPolarAngle={Math.PI / 2}
           minPolarAngle={Math.PI / 2}
           autoRotateSpeed={10}
+          enableDamping
+          dampingFactor={0.25}
         />
         <Computers isMobile={isMobile} />
       </Suspense>
