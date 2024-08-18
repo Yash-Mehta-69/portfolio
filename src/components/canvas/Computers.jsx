@@ -87,19 +87,24 @@
 
 
 
-
-
-import React, { Suspense, useState, useEffect } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Preload, useGLTF } from "@react-three/drei";
+
 import CanvasLoader from "../Loader";
 
-const Computers = ({ isMobile, onError }) => {
+const Computers = ({ isMobile }) => {
   const { scene, error } = useGLTF("./pc/scene.gltf");
 
   if (error) {
-    onError(); // Notify error
-    return null; // Don't render anything in case of error
+    console.error("Error loading the GLTF model:", error);
+    return (
+      <mesh>
+        {/* Fallback content if the model fails to load */}
+        <boxGeometry args={[1, 1, 1]} />
+        <meshStandardMaterial color="orange" />
+      </mesh>
+    );
   }
 
   return (
@@ -124,22 +129,30 @@ const Computers = ({ isMobile, onError }) => {
   );
 };
 
-const ComputersCanvas = ({ onError }) => {
+const ComputersCanvas = () => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 500px)");
 
+    // Initialize state based on the current media query match
     setIsMobile(mediaQuery.matches);
 
+    // Define a callback function to handle changes to the media query
     const handleMediaQueryChange = (event) => {
       setIsMobile(event.matches);
     };
 
-    mediaQuery.addEventListener("change", handleMediaQueryChange);
+    // Ensure mediaQuery is valid before adding the listener
+    if (mediaQuery) {
+      mediaQuery.addEventListener("change", handleMediaQueryChange);
+    }
 
+    // Cleanup function to remove the listener when the component unmounts
     return () => {
-      mediaQuery.removeEventListener("change", handleMediaQueryChange);
+      if (mediaQuery) {
+        mediaQuery.removeEventListener("change", handleMediaQueryChange);
+      }
     };
   }, []);
 
@@ -161,12 +174,12 @@ const ComputersCanvas = ({ onError }) => {
           minPolarAngle={Math.PI / 2}
           autoRotateSpeed={10}
         />
-        <Computers isMobile={isMobile} onError={onError} />
+        <Computers isMobile={isMobile} />
       </Suspense>
+
       <Preload all />
     </Canvas>
   );
 };
 
 export default ComputersCanvas;
-
