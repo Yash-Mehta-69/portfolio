@@ -56,13 +56,11 @@ import { Decal, Float, OrbitControls, Preload, useTexture } from "@react-three/d
 import CanvasLoader from "../Loader";
 
 const Ball = ({ imgUrl }) => {
-  // Load the texture
   const [decal, error] = useTexture([imgUrl], (texture) => texture, (err) => console.error(err));
 
   if (error) {
     return (
       <mesh>
-        {/* Fallback content if the texture fails to load */}
         <textGeometry attach="geometry" args={["Failed to Load", { size: 1, height: 0.2 }]} />
         <meshStandardMaterial attach="material" color="red" />
       </mesh>
@@ -112,3 +110,4 @@ const BallCanvas = ({ icon }) => {
 };
 
 export default BallCanvas;
+
