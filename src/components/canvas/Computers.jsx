@@ -116,7 +116,6 @@ const Computers = ({ isMobile }) => {
         scale={isMobile ? 0.29 : 0.59}
         position={isMobile ? [0, -2, -0.6] : [0, -3.25, -1.5]}
         rotation={[-0.01, -0.2, -0.1]}
-        rotation-y={0}
       />
     </mesh>
   );
@@ -140,6 +139,22 @@ const ComputersCanvas = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const disposeWebGLContexts = () => {
+      const allCanvas = document.querySelectorAll('canvas');
+      allCanvas.forEach(canvas => {
+        const gl = canvas.getContext('webgl') || canvas.getContext('webgl2');
+        if (gl) {
+          gl.getExtension('WEBGL_lose_context').loseContext();
+        }
+      });
+    };
+
+    return () => {
+      disposeWebGLContexts();
+    };
+  }, []);
+
   return (
     <Canvas
       frameloop='demand'
@@ -148,10 +163,6 @@ const ComputersCanvas = () => {
       camera={{ position: [20, 3, 5], fov: 25 }}
       gl={{ preserveDrawingBuffer: true }}
       onContextMenu={(e) => e.preventDefault()}
-      onCreated={({ gl }) => {
-        // Properly dispose of context when component unmounts
-        return () => gl.dispose();
-      }}
     >
       <Suspense fallback={<CanvasLoader />}>
         <OrbitControls
