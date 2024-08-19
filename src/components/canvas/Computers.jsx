@@ -89,15 +89,14 @@
 import React, { Suspense, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Preload, useGLTF } from "@react-three/drei";
-
 import CanvasLoader from "../Loader";
-import FallbackComponent from "./FallbackComponent"; // Import the fallback component
+import FallbackComponent from "./FallbackComponent";
 
 const Computers = ({ isMobile }) => {
   const { scene, error } = useGLTF("./pc/scene.gltf");
 
   if (error) {
-    return <FallbackComponent />; // Render fallback if there's an error
+    return <FallbackComponent />;
   }
 
   return (
@@ -127,21 +126,15 @@ const ComputersCanvas = () => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    // Add a listener for changes to the screen size
     const mediaQuery = window.matchMedia("(max-width: 500px)");
 
-    // Set the initial value of the `isMobile` state variable
-    setIsMobile(mediaQuery.matches);
-
-    // Define a callback function to handle changes to the media query
     const handleMediaQueryChange = (event) => {
       setIsMobile(event.matches);
     };
 
-    // Add the callback function as a listener for changes to the media query
+    setIsMobile(mediaQuery.matches);
     mediaQuery.addEventListener("change", handleMediaQueryChange);
 
-    // Remove the listener when the component is unmounted
     return () => {
       mediaQuery.removeEventListener("change", handleMediaQueryChange);
     };
@@ -155,6 +148,10 @@ const ComputersCanvas = () => {
       camera={{ position: [20, 3, 5], fov: 25 }}
       gl={{ preserveDrawingBuffer: true }}
       onContextMenu={(e) => e.preventDefault()}
+      onCreated={({ gl }) => {
+        // Properly dispose of context when component unmounts
+        return () => gl.dispose();
+      }}
     >
       <Suspense fallback={<CanvasLoader />}>
         <OrbitControls
