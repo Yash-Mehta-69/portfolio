@@ -6,7 +6,7 @@ const FallbackComponent = () => {
     <div className="fallback-container">
       <p>Model could not be loaded.</p>
       {/* Optionally, include a placeholder image or other content */}
-      <img src="/path/to/placeholder-image.png" alt="Placeholder" />
+      {/* <img src="/path/to/placeholder-image.png" alt="Placeholder" /> */}
     </div>
   );
 };
