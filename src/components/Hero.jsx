@@ -61,6 +61,7 @@ import { ComputersCanvas } from "./canvas"
 import Socials from './Socials'
 import './Button.css'
 import './Hero.css'
+import {motion} from 'framer-motion'
 
 const Hero = () => {
   return (
@@ -91,13 +92,30 @@ const Hero = () => {
 
       </div>
 
-      <div className="absolute right-5 bottom-5 flex flex-col gap-4 z-10">
+      <div className="absolute right-5 bottom-10 flex flex-col gap-4 z-10">
         <Socials />
       </div>
 
-      <div className="canvas-container bg-red-100">
+      <div className="canvas-container">
         <ComputersCanvas />
       </div>
+
+      {/* <div className="absolute hidden xs:flex xs:bottom-10 bottom-32 w-full flex justify-center items-center bg-blue-100">
+        <a href="#about">
+          <div className="w-[35px] h-[64px] rounded-3xl border-4 border-secondary flex justify-center items-start p-2">
+            <motion.div 
+            animate={{
+              y:[0, 24, 0]
+            }}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+              repeatType: 'loop'
+            }}
+             className='w-3 h-3 rounded-full bg-secondary mb-1'/>
+          </div>          
+        </a>
+      </div> */}
 
     </section>
   )

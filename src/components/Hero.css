@@ -5,15 +5,15 @@
     bottom: 30%;
     transform: translateX(-50%) translateY(50%); /* Center horizontally and adjust vertical alignment */
     width: 100%;
-    max-width: 500px;
-    height: 300px;
+    max-width: 600px;
+    height: 400px;
     overflow: hidden; /* Ensures no overflow from the canvas */
   }
   
   @media (max-width: 500px) {
     .canvas-container {
       height: 200px; /* Adjust height for smaller screens */
-      bottom: 30%; /* Adjust vertical positioning for smaller screens */
+      bottom: 35%; /* Adjust vertical positioning for smaller screens */
     }
   }
   
